@@ -1,0 +1,2 @@
+rootProject.name = 'recommendation-system'
+include 'neo4j-plugin'
