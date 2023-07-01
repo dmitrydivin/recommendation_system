@@ -1,0 +1,7 @@
+CREATE (:User {id: 0, name: 'Melvin R. French'})
+CREATE (:User {id: 1, name: 'James I. Dolezal'})
+CREATE (:User {id: 2, name: 'Elmer H. Welch'})
+CREATE (:User {id: 3, name: 'Carlos M. Pratt'})
+CREATE (:User {id: 4, name: 'John B. Perry'})
+CREATE (:User {id: 5, name: 'William H. Schmitt'})
+CREATE (:User {id: 6, name: 'Lonnie R. Wright'})
