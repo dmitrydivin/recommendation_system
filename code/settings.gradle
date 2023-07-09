@@ -1,2 +1,2 @@
-rootProject.name = 'recommendation-system'
-include 'neo4j-plugin'
+rootProject.name = 'recommender'
+include 'neo4j-plugin', 'demo-photo-recommender-backend', 'demo-photo-recommender-frontend'

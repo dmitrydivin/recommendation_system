@@ -1,0 +1,6 @@
+spring:
+  neo4j:
+    uri: bolt://localhost:7687
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher

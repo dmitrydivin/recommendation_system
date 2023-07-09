@@ -26,6 +26,13 @@ import java.util.*;
  */
 public class ClassifierSimilarityFunctions {
     @UserFunction
+    @Description("alg.classifiers.similar_l([1,2,3], [1.0,2.0,1.0], [2]) - comparison of classifiers by their features distances")
+    public double similar_l(@Name("leftClassifiers") List<Long> leftClassifiers,
+                          @Name("leftFeatures") List<Double> leftFeatures,
+                          @Name("rightClassifiers") List<Long> rightClassifiers) {
+        return similar(leftClassifiers, leftFeatures, rightClassifiers, rightClassifiers.stream().map(it -> 1.0).toList());
+    }
+    @UserFunction
     @Description("alg.classifiers.similar([1,2,3], [1.0,2.0,1.0], [2], [1.0]) - comparison of classifiers by their features distances")
     public double similar(@Name("leftClassifiers") List<Long> leftClassifiers,
                                   @Name("leftFeatures") List<Double> leftFeatures,
@@ -63,23 +70,17 @@ public class ClassifierSimilarityFunctions {
         for (int i = 0, k = vectorA.length; i < k; i++) {
             double valueA = vectorA[i];
             double valueB = vectorB[i];
-//            if (Double.isNaN(valueA) || Double.isNaN(valueB)) {
-//                continue;
-//            }
             dotProduct += valueA * valueB;
             normA += Math.pow(valueA, 2);
             normB += Math.pow(valueB, 2);
         }
         return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
     }
-
     public double[] getFeaturesVector(List<Long> classifiers, List<Double> classifierFeatures, Long[] unionClassifiers) {
         Map<Long, Double> classifier2features = new HashMap<>();
-        double maxFeatures = 0.0;
         for (int i = 0, size = classifiers.size(); i < size; i++) {
             long classifier = classifiers.get(i);
             double features = classifierFeatures.get(i);
-            maxFeatures = Math.max(maxFeatures, features);
             classifier2features.put(classifier, features);
         }
         int vectorSize = unionClassifiers.length;
@@ -90,7 +91,7 @@ public class ClassifierSimilarityFunctions {
             if (features == null) {
                 res[i] = 0.0;
             } else {
-                res[i] = features / maxFeatures;
+                res[i] = features;
             }
         }
         return res;

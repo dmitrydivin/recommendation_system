@@ -1,0 +1,35 @@
+plugins {
+  id "com.github.node-gradle.node" version "5.0.0"
+}
+
+node {
+  download = true
+  version = "18.16.0"
+}
+
+task start(type: PnpmTask) {
+  dependsOn 'pnpmInstall'
+  args = ['start']
+
+  doFirst {
+    print "starting frontend app"
+  }
+}
+
+task build(type: PnpmTask) {
+  dependsOn 'pnpmInstall'
+  args = ['build']
+
+  doFirst {
+    print "building frontend app"
+  }
+}
+
+task clean(type: Delete) {
+  delete "build"
+  delete "node_modules"
+
+  doFirst {
+    print "deleting frontend temporary files"
+  }
+}

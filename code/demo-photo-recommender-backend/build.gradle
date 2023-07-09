@@ -1,0 +1,63 @@
+plugins {
+  id 'java'
+  id 'org.springframework.boot' version '3.1.0'
+  id 'io.spring.dependency-management' version '1.1.0'
+  id 'org.springdoc.openapi-gradle-plugin' version '1.6.0'
+  id "com.google.cloud.tools.jib" version "3.3.2"
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
+}
+
+processResources {
+  from('../demo-photo-recommender-frontend/build') {
+    into 'static'
+  }
+}
+
+processResources.mustRunAfter(':demo-photo-recommender-frontend:build').dependsOn(':demo-photo-recommender-frontend:build')
+
+
+jar {
+  enabled = false
+}
+
+bootJar {
+  archiveBaseName = 'photo-recommender'
+}
+
+jib {
+  to {
+    image = 'divindmitry/photo-recommender'
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-logging'
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+  implementation 'org.neo4j.driver:neo4j-java-driver-spring-boot-starter:4.3.6.0'
+
+  compileOnly 'org.projectlombok:lombok'
+  annotationProcessor 'org.projectlombok:lombok'
+}
+
+tasks.named('test') {
+  useJUnitPlatform()
+}
+
+task start() {
+  dependsOn 'bootRun'
+}
