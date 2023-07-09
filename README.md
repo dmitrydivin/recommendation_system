@@ -121,7 +121,7 @@ If the preferred interests are not selected, then everything will be shown in th
 
 After pressing the `Get recommendations` button, photo recommendations will be opened.
 
-![Recommendation Settings](./docs/recommender_settings.png)
+![Recommendation Settings](./docs/recommender_photos.png)
 
 Only the 5 most popular keywords relevant to the user's interests will be shown in the header. Any keyword can be removed and it will affect to the recommendations.
 
