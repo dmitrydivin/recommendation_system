@@ -5,8 +5,8 @@
 - [Usage](#usage)
 - [Repository Structure](#repository-structure)
 - [PoC](#poc)
- * [Content-based filtering][#content-based-filtering]]
-- [Articles]
+ * [Content-based filtering](#content-based-filtering)
+- [Articles](#articles)
 
 ## Introduction
 
