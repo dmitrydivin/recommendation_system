@@ -19,12 +19,13 @@ export default function SimilarPhotos(props) {
         similarPhotoId,
         authUserId,
         serviceUrl,
-        throttling,
         onPhotoSelected = () => {},
         onPhotoLiked = () => {},
         rows = 4
     } = props;
     const [photos, setPhotos] = useState([]);
+    const [maxHitRate, setMaxHitRate] = useState(1.0)
+    const [hasMore, setHasMore] = useState(true);
 
     useEffect(() => {
         setPhotos([]);
@@ -32,7 +33,7 @@ export default function SimilarPhotos(props) {
     }, [similarPhotoId, authUserId]);
 
     async function fetchPhotos() {
-        const response = await fetch(`${serviceUrl}/api/photos/${similarPhotoId}/similar?throttling=${throttling}&limit=${4 * rows}`, {
+        const response = await fetch(`${serviceUrl}/api/photos/${similarPhotoId}/similar?maxHitRate=${maxHitRate}&limit=${4 * rows}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'AUTH_USER_ID': authUserId,
@@ -40,13 +41,19 @@ export default function SimilarPhotos(props) {
         });
         if (response.ok) {
             const items = await response.json();
+            let next = maxHitRate;
+            for (let i = 0; i < items.length; i++) {
+                next = Math.min(items[i].score);
+            }
             setPhotos([...photos, ...items]);
+            setMaxHitRate(next);
+            setHasMore(items.length !== 0);
         }
     }
 
     return (
         <InfiniteScroll next={fetchPhotos}
-                        hasMore={true}
+                        hasMore={hasMore}
                         loader={<Loader/>}
                         dataLength={photos.length}>
             <WrapperImages>

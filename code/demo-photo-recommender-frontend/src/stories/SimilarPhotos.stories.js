@@ -9,7 +9,7 @@ export function SimilarPhotos() {
     const [similarPhotoId, setSimilarPhotoId] = useState(45);
     return (
         <div className="container">
-            <SimilarPhotosComponent serviceUrl="http://localhost:6006" authUserId={0} similarPhotoId={similarPhotoId} onPhotoSelected={setSimilarPhotoId} throttling={0.3} rows={3}/>
+            <SimilarPhotosComponent serviceUrl="http://localhost:6006" authUserId={0} similarPhotoId={similarPhotoId} onPhotoSelected={setSimilarPhotoId} rows={3}/>
         </div>
     );
 }

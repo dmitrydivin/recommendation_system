@@ -80,7 +80,8 @@ public class PhotoApiController {
     public ResponseEntity<List<Map<String, Object>>> getSimilarPhotos(@PathVariable Long id,
                                                                                @RequestHeader(value = "AUTH_USER_ID", defaultValue = "0", required = false) Long authUserId,
                                                                                @RequestParam(defaultValue = "10", required = false) Integer limit,
-                                                                               @RequestParam(defaultValue = "0.5", required = false) Double hitRate,
+                                                                               @RequestParam(defaultValue = "0.5", required = false) Double minHitRate,
+                                                                               @RequestParam(defaultValue = "1.0", required = false) Double maxHitRate,
                                                                                //by default match with any item from select
                                                                                @RequestParam(defaultValue = "1.0", required = false) Double throttling) {
         List<Map<String, Object>> items = new ArrayList<>();
@@ -90,11 +91,11 @@ public class PhotoApiController {
                     with s, u
                     match (p:Photo) where not (u)-[:IS_VIEWED]->(p) and p.id * 0 + rand() > 1.0 - $throttling and p<>s
                     with p.id as id, p.url as url, p.title as title, alg.classifiers.similar(s.classifiers, s.features, p.classifiers, p.features) as score
-                    where score >= $hitRate
+                    where score > $minHitRate and score < $maxHitRate
                     return id, url, title, score
                     order by score desc
                     limit $limit
-                    """, Map.of("userId", authUserId, "photoId", id, "limit", limit, "hitRate", hitRate, "throttling", throttling));
+                    """, Map.of("userId", authUserId, "photoId", id, "limit", limit, "minHitRate", minHitRate, "throttling", throttling, "maxHitRate", maxHitRate));
             while(result.hasNext()) {
                 Record record = result.next();
                 Map<String, Object> item = new HashMap<>();

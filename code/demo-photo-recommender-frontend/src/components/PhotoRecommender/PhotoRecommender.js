@@ -96,7 +96,6 @@ function SimilarPhotosPage(props) {
                            authUserId={authUserId}
                            similarPhotoId={id}
                            onPhotoSelected={handleOnPhotoSelected} onPhotoLiked={handleOnPhotoLiked}
-                           throttling={0.3}
                            rows={4}
             />
         </div>

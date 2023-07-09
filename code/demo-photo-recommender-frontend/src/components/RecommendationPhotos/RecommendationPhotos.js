@@ -24,6 +24,7 @@ export default function RecommendationPhotos(props) {
     } = props;
     const [photos, setPhotos] = useState([]);
     const [viewed, setViewed] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
 
     useEffect(() => {
         setPhotos([]);
@@ -51,6 +52,7 @@ export default function RecommendationPhotos(props) {
             const items = await response.json();
             setPhotos([...photos, ...items]);
             setViewed(items.map(it => it.id));
+            setHasMore(items.length !== 0);
         }
     }
 
@@ -60,7 +62,7 @@ export default function RecommendationPhotos(props) {
 
     return (
         <InfiniteScroll next={fetchPhotos}
-                        hasMore={true}
+                        hasMore={hasMore}
                         loader={<Loader/>}
                         dataLength={photos.length}>
             <WrapperImages>
