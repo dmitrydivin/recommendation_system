@@ -149,7 +149,7 @@ Then you need to wait for the Neo4j server and web application to start.
 - Demo application will be available on `http://localhost:8080`
 - Neo4j web server will be available at `http://localhost:7474` 
 
-The dataset for the PoC was taken from an open source (Unsplash dataset)[https://github.com/unsplash/datasets]
+The dataset for the PoC was taken from an open source [Unsplash dataset](https://github.com/unsplash/datasets)
 
 And the following tables/columns are included
 - photos.photo_description
