@@ -19,6 +19,33 @@ public class UserApiController {
     @Autowired
     Driver driver;
 
+    @PostMapping("/user")
+    public ResponseEntity<Long> createOrGetUser(@RequestParam String uuid) {
+        Long id = null;
+        try (Session session = driver.session(); Transaction tx = session.beginTransaction()) {
+            boolean exists = tx.run("""
+                    match (u:User{uuid: $uuid})
+                    return count(u) > 0 as exists
+                    """, Map.of("uuid", uuid)).next().get("exists").asBoolean();
+            if (exists) {
+                id = tx.run("""
+                    match (u:User{uuid: $uuid})
+                    return u.id as userId
+                    """, Map.of("uuid", uuid)).next().get("userId").asLong();
+            } else {
+                id = tx.run("""
+                    match (u:User)
+                    with max(u.id) + 1 as userId
+                    create (u:User{id: userId, uuid: $uuid})
+                    return userId
+                    """, Map.of("uuid", uuid)).next().get("userId").asLong();
+            }
+            tx.commit();
+        }
+
+        return ResponseEntity.ok(id);
+    }
+
     @GetMapping("/user/interests")
     public ResponseEntity<Map<String, Double>> getInterests(@RequestHeader(value = "AUTH_USER_ID", defaultValue = "0", required = false) Long authUserId,
                                                             @RequestParam(defaultValue = "3600000", required = false) Long recentTime,

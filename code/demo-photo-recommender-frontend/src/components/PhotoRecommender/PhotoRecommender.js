@@ -107,7 +107,13 @@ function RecommendationSettingsPage(props) {
     const navigate = useNavigate();
 
     async function handleOnChanged({interests}) {
-        await fetch(`${serviceUrl}/api/user/history`, {method: 'delete'});
+        await fetch(`${serviceUrl}/api/user/history`, {
+            method: 'delete',
+            headers: {
+                'Content-Type': 'application/json',
+                'AUTH_USER_ID': authUserId,
+            },
+        });
         await fetch(`${serviceUrl}/api/user/interests`, {
             method: 'post',
             body: JSON.stringify(interests),
@@ -116,7 +122,13 @@ function RecommendationSettingsPage(props) {
                 'AUTH_USER_ID': authUserId,
             },
         });
-        await fetch(`${serviceUrl}/api/user/experience/rollup`, {method: 'put'});
+        await fetch(`${serviceUrl}/api/user/experience/rollup`, {
+            method: 'put',
+            headers: {
+                'Content-Type': 'application/json',
+                'AUTH_USER_ID': authUserId,
+            },
+        });
         navigate(`/recommendations`);
     }
 
