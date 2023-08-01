@@ -34,11 +34,12 @@ public class UserApiController {
                     """, Map.of("uuid", uuid)).next().get("userId").asLong();
             } else {
                 id = tx.run("""
-                    match (u:User)
-                    with max(u.id) + 1 as userId
-                    create (u:User{id: userId, uuid: $uuid})
-                    return userId
-                    """, Map.of("uuid", uuid)).next().get("userId").asLong();
+                        MERGE (s:Sequence {id:'user_seq'})
+                        ON CREATE SET s.current = 1
+                        ON MATCH SET s.current = s.current+1
+                        create (u:User{id: s.current, uuid: $uuid, created_at: timestamp()})
+                        return s.current as userId
+                        """, Map.of("uuid", uuid)).next().get("userId").asLong();
             }
             tx.commit();
         }

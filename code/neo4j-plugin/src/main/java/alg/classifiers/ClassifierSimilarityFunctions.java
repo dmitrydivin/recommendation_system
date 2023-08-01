@@ -26,12 +26,31 @@ import java.util.*;
  */
 public class ClassifierSimilarityFunctions {
     @UserFunction
-    @Description("alg.classifiers.similar_l([1,2,3], [1.0,2.0,1.0], [2]) - comparison of classifiers by their features distances")
-    public double similar_l(@Name("leftClassifiers") List<Long> leftClassifiers,
-                          @Name("leftFeatures") List<Double> leftFeatures,
-                          @Name("rightClassifiers") List<Long> rightClassifiers) {
-        return similar(leftClassifiers, leftFeatures, rightClassifiers, rightClassifiers.stream().map(it -> 1.0).toList());
+    public Double cosineSimilarity(@Name("leftVector") Map<String, Double> leftVector,
+                                   @Name("rightVector") Map<String, Double> rightVector) {
+        Set<String> intersection = new HashSet<>(leftVector.keySet());
+        intersection.retainAll(rightVector.keySet());
+        double dotProduct = 0.0;
+        for (String key : intersection) {
+            dotProduct += leftVector.get(key) * rightVector.get(key);
+        }
+        double d1 = 0.0d;
+        for (Double value : leftVector.values()) {
+            d1 += Math.pow(value, 2);
+        }
+        double d2 = 0.0d;
+        for (Double value : rightVector.values()) {
+            d2 += Math.pow(value, 2);
+        }
+        double cosineSimilarity;
+        if (d1 <= 0.0 || d2 <= 0.0) {
+            cosineSimilarity = 0.0;
+        } else {
+            cosineSimilarity = dotProduct / (Math.sqrt(d1) * Math.sqrt(d2));
+        }
+        return cosineSimilarity;
     }
+
     @UserFunction
     @Description("alg.classifiers.similar([1,2,3], [1.0,2.0,1.0], [2], [1.0]) - comparison of classifiers by their features distances")
     public double similar(@Name("leftClassifiers") List<Long> leftClassifiers,

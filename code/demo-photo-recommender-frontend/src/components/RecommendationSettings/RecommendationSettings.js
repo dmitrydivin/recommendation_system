@@ -8,9 +8,17 @@ const Img = styled.img`
   border-radius: 4px;
 `;
 
-const UnsplashInterestWrapper = styled.div`
+const UnsplashInterestWrapper = styled.a`
   cursor: pointer;
-  filter: invert(${props => props.$selected ? 0 : 0.4});
+  filter: invert(0.4);
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+const UnsplashInterestSelectedWrapper = styled.a`
+  cursor: pointer;
+  filter: invert(0);
   border-radius: 6px;
   display: flex;
   justify-content: center;
@@ -40,11 +48,12 @@ function UnsplashInterest(props) {
         onSelected(state, interest);
     }
 
+    let Wrapper = selected ? UnsplashInterestSelectedWrapper : UnsplashInterestWrapper;
     return (
-        <UnsplashInterestWrapper onClick={handleOnSelect} $selected={selected}>
+        <Wrapper onClick={handleOnSelect}>
             <InterestTitle>{interest}</InterestTitle>
             <Img src={`${imageUrl}?fm=jpg&w=1080&q=80&fit=max`} alt=""/>
-        </UnsplashInterestWrapper>
+        </Wrapper>
     );
 }
 

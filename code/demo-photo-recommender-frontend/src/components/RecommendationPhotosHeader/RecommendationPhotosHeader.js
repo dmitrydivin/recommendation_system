@@ -35,13 +35,13 @@ export default function RecommendationPhotosHeader(props) {
     useInterval(() => loadInterests(), 5000);
     return (
         <div className="sticky-top bg-white">
-            <div className="d-flex justify-content-between align-items-center">
-                <div className="d-flex justify-content-start align-items-center gap-3">
-                    <h1 className="fw-lighter">Recommended Photos</h1>
+            <div className="d-flex justify-content-between align-items-center flex-wrap">
+                <div className="d-flex justify-content-start align-items-center gap-2 flex-wrap mb-1">
+                    <h1 className="fw-lighter mb-0 pb-0">Recommended Photos</h1>
                     {interests.length > 0 ? (
                         <>
-                            <div className="vr mt-2 mb-2"/>
-                            <div className="hstack gap-1">
+                            <div className="vr mt-1 mb-1 d-none d-lg-block"/>
+                            <div className="d-flex flex-wrap gap-1">
                                 <div className="fw-light">Most important interests:</div>
                                 {interests.map((it, index) => {
                                     return (
@@ -59,9 +59,10 @@ export default function RecommendationPhotosHeader(props) {
                     ) : null}
 
                 </div>
-                <button type="button" className="btn btn-dark" onClick={onTryAgain}>Try again</button>
+                <button type="button" className="btn btn-dark d-none d-md-block" onClick={onTryAgain}>Try again</button>
+                <button type="button" className="btn btn-dark d-md-none flex-fill" onClick={onTryAgain}>Try again</button>
             </div>
-            <hr className="mt-0"/>
+            <hr className="mb-1"/>
         </div>
     );
 }
